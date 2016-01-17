@@ -320,6 +320,11 @@ class GooglePlacesRequestHelpers {
     }
     
     private class func doRequest(url: String, params: [String: String], success: NSDictionary -> ()) {
+        if (params.count == 3) {
+            if (params["input"]!.rangeOfString(" ") != nil) {
+                params["input"] = params["input"]!.stringByReplacingOccurrencesOfString(" ", withString: "%20")
+            }
+        }
         var request = NSMutableURLRequest(
             URL: NSURL(string: "\(url)?\(query(params))")!
         )

@@ -319,11 +319,12 @@ class GooglePlacesRequestHelpers {
         return CFURLCreateStringByAddingPercentEscapes(nil, string, nil, legalURLCharactersToBeEscaped, CFStringBuiltInEncodings.UTF8.rawValue) as String
     }
     
-    private class func doRequest(url: String, params: [String: String], success: NSDictionary -> ()) {
+    private class func doRequest(url: String, var params: [String: String], success: NSDictionary -> ()) {
         if (params.count == 3) {
-            if (params["input"]!.rangeOfString(" ") != nil) {
-                params["input"] = params["input"]!.stringByReplacingOccurrencesOfString(" ", withString: "%20")
-            }
+            params["input"]! = params["input"]!.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
+            /*if (params["input"]!.rangeOfString(" ") != nil) {
+              params["input"] = params["input"]!.stringByReplacingOccurrencesOfString(" ", withString: "%20")
+            }*/
         }
         var request = NSMutableURLRequest(
             URL: NSURL(string: "\(url)?\(query(params))")!

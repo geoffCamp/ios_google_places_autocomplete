@@ -116,7 +116,7 @@ public class GooglePlacesAutocomplete: UINavigationController {
         self.init(rootViewController: gpaViewController)
         self.gpaViewController = gpaViewController
         
-        closeButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: "closeCanceled")
+        closeButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: #selector(GooglePlacesAutocomplete.closeCanceled))
         closeButton.style = UIBarButtonItemStyle.Done
         
         gpaViewController.navigationItem.leftBarButtonItem = closeButton
@@ -167,8 +167,8 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GooglePlacesAutocompleteContainer.keyboardWasShown(_:)), name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GooglePlacesAutocompleteContainer.keyboardWillBeHidden(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         searchBar.becomeFirstResponder()
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -200,7 +200,7 @@ extension GooglePlacesAutocompleteContainer: UITableViewDataSource, UITableViewD
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
         
         // Get the corresponding candy from our candies array
         let place = self.places[indexPath.row]
@@ -326,12 +326,12 @@ class GooglePlacesRequestHelpers {
               params["input"] = params["input"]!.stringByReplacingOccurrencesOfString(" ", withString: "%20")
             }*/
         }
-        var request = NSMutableURLRequest(
+        let request = NSMutableURLRequest(
             URL: NSURL(string: "\(url)?\(query(params))")!
         )
         
-        var session = NSURLSession.sharedSession()
-        var task = session.dataTaskWithRequest(request) { data, response, error in
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
             self.handleResponse(data, response: response as? NSHTTPURLResponse, error: error, success: success)
         }
         
@@ -354,9 +354,9 @@ class GooglePlacesRequestHelpers {
             return
         }
         
-        var serializationError: NSError?
+        let serializationError: NSError? = nil
         do {
-            var json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(
+            let json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(
                 data,
                 options: NSJSONReadingOptions.MutableContainers
                 //error: &serializationError

@@ -319,22 +319,23 @@ class GooglePlacesRequestHelpers {
         return CFURLCreateStringByAddingPercentEscapes(nil, string as CFString!, nil, legalURLCharactersToBeEscaped, CFStringBuiltInEncodings.UTF8.rawValue) as String
     }
     
-    private class func doRequest(_ url: String, params: [String: String], success: @escaping (NSDictionary) -> ()) {
+    class func doRequest(_ url: String, params: [String: String], success: @escaping (NSDictionary) -> ()) {
         var params = params
         if (params.count == 3) {
-            params["input"]! = params["input"]!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed())!
+            params["input"]! = params["input"]!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             /*if (params["input"]!.rangeOfString(" ") != nil) {
               params["input"] = params["input"]!.stringByReplacingOccurrencesOfString(" ", withString: "%20")
             }*/
         }
-        let request = NSMutableURLRequest(
+        let request = URLRequest(
             url: URL(string: "\(url)?\(query(params as [String : AnyObject]))")!
         )
         
         let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
-            self.handleResponse(data, response: response as? , error: error, success: success)
-        }) 
+        let task = session.dataTask(with: request) {
+          (data:Data?, response:URLResponse?, error:Error?) in
+            self.handleResponse(data, response: response as! HTTPURLResponse!, error: error as NSError!, success: success)
+        }
         
         task.resume()
     }

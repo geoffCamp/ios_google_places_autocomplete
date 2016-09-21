@@ -177,11 +177,11 @@ open class GooglePlacesAutocompleteContainer: UIViewController {
     func keyboardWasShown(_ notification: Notification) {
         if isViewLoaded && view.window != nil {
             let info: Dictionary = (notification as NSNotification).userInfo!
-            let keyboardSize: CGSize = ((info[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size)
-            let contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            //let keyboardSize: CGSize = ((info[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size)
+            //let contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
             
-            tableView.contentInset = contentInsets;
-            tableView.scrollIndicatorInsets = contentInsets;
+            //tableView.contentInset = contentInsets;
+            //tableView.scrollIndicatorInsets = contentInsets;
         }
     }
     
